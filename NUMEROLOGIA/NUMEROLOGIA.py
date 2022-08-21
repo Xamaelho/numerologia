@@ -1,24 +1,3 @@
-#PROYECTO NUMEROLOGÍA CON OPCIONES
-"""Pasos a seguir:
-A - Generar los siguientes datos:
-    1- Ingresar un nombre por teclado
-    2- Traducir cada letra en un número considerando los espacios.
-    3- Sumar todos los numeros para generar el número del carácter.
-    4- Sumar las vocales para generar el numero del corazón.
-    5- Sumar las consonantes para generar el número social.
-    6- Verificar si hay ausencias de números.
-    7- Verificar las repeticiones de números.
-B - Reducir espacio en el algoritmo y dar las opciones al usuario para que
-         elija que quiere ver.
-    1- Usando definiciones.
-    2- Dirigiendo el programa con bucles.
-C - Generar nuevos datos que hagan más específico aún los datos.
-    1- Agregar al algoritmo el dato de la fecha de nacimiento
-D - Crear relaciones y análisis entre los datos.
-    1- Numeros predominantes positivos y negativos.
-    2- Relación número del carácter y del destino
-    3- Aspectos positivos y negativos de la persona.
-"""
 #SOBRE LA CLASE ======================================================================================
 class numeros():
     def __init__(self, digito:int, esPar, esta_presente):
