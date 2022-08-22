@@ -163,6 +163,9 @@ def reducirEnDigitos(numero_ingresado: int):
     lst_numero_con_digitos = list()
     numero_reducido = 0
     digito_resultante = 0
+    if numero_ingresado < 10:
+        lst_salida[0] = numero_ingresado
+        return lst_salida
     while numero_ingresado > 9:
         lst_numero_con_digitos.append(numero_ingresado)
         for opcion_comparacion in lst_numero_para_comparar:
@@ -208,6 +211,9 @@ def calcularNumerosMaestros():
                     digito = reconocerLetra(letra)
                     numero_acumulado += digito
         dict_datos[tipo] = reducirEnDigitos(numero_acumulado)
+def calcularNumeroDestino():
+    numero = dict_datos["dia"][0] + dict_datos["mes"][0] + dict_datos["anio"][0]
+    dict_datos["numero_Destino"] = reducirEnDigitos(numero)
 def contarNumeros(nombre_en_numeros):
     for indice in nombre_en_numeros:
         for numero in lst_numeros:
@@ -318,6 +324,7 @@ def calcularDatos():
     convertirNombreANumeros(nombre_en_letras)
     calcularNumerosMaestros()
     contarNumeros(dict_datos['lst_nombre_En_Numeros'])
+    calcularNumeroDestino()
 def mostrarTramaDelNombre():
     print(nombre_en_letras)
     mostrarNumerosMaestros()
@@ -326,6 +333,7 @@ def mostrarDiccionario():
     print("Numero de carácter: ", dict_datos["caracter"][0])
     print("Numero de corazon: ", dict_datos["corazon"][0])
     print("Numero de lo social: ", dict_datos["social"][0])
+    print("Numero de destino: ", dict_datos["numero_Destino"][0])
     mostrarRepeticiones()
 
     #for x,y in dict_datos.items():
