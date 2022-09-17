@@ -1,9 +1,10 @@
-#SOBRE LA CLASE ======================================================================================
+#SOBRE LA CLASE ===================================================
 class numeros():
-    def __init__(self, digito:int, esPar, esta_presente):
+    def __init__(self, digito:int, esPar, esta_presente, dignidad:int):
         self.digito = digito                
         self.esPar = esPar                  
-        self.esta_presente = esta_presente    
+        self.esta_presente = esta_presente
+        self.dignidad = dignidad
     def ausentes(self):
         global dict_datos
         if self.esta_presente != 0:
@@ -13,20 +14,19 @@ class numeros():
             return self.digito
     #dignidad = def para saber la cantidad de importancia de los numeros
 
-
-uno1 = numeros(1, False, 0)
-dos2 = numeros(2, True, 0)
-tres3 = numeros(3, False, 0)
-cuatro4 = numeros(4, True, 0)
-cinco5 = numeros(5, False, 0)
-seis6 = numeros(6, True, 0)
-siete7 = numeros(7, False, 0)
-ocho8 = numeros(8, True, 0)
-nueve9 = numeros(9, False, 0)
+uno1 = numeros(1, False, 0, 0)
+dos2 = numeros(2, True, 0, 0)
+tres3 = numeros(3, False, 0, 0)
+cuatro4 = numeros(4, True, 0, 0)
+cinco5 = numeros(5, False, 0, 0)
+seis6 = numeros(6, True, 0, 0)
+siete7 = numeros(7, False, 0, 0)
+ocho8 = numeros(8, True, 0, 0)
+nueve9 = numeros(9, False, 0, 0)
 lst_numeros = [uno1, dos2, tres3, cuatro4, cinco5, seis6, siete7, ocho8, nueve9]
 dict_datos = dict()
 tlp_numeros_maestros = ("caracter", "corazon", "social")
-#INGRESOS ===================================================================================
+#INGRESOS ========================================================
 def ingresarNombre():
     global nombre_en_letras
     control = True
@@ -52,7 +52,7 @@ def ingresarNombre():
         if nombre_en_letras != " ":
             control = False
 
-#SOBRE LA FECHA DE NACIMIENTO =================================================
+#SOBRE LA FECHA DE NACIMIENTO ============================================
 def esBisiesto(year: int):
     return year % 4 == 0 and year % 100 != 0 or year % 400 == 0
 def ingresarDiaNacimiento():
@@ -71,8 +71,8 @@ def ingresarMesNacimiento():
     while control:
         mes = int(input("Ingrese el mes de nacimiento en números (1 a 12): "))
         if mes < 1 or mes > 12 :
-            print("Se ha ingresado un número erróneo para el mes de nacimiento. \
-                Debe ser un número del 1 al 12")
+            print("Se ha ingresado un número erróneo para el mes de \
+                nacimiento. Debe ser un número del 1 al 12")
             print("Enero = 1. Febrero = 2. Marzo = 3. Abril = 4. Mayo = 5. \
                 Junio = 6.")
             print("Julio = 7. Agosto = 8. Septiembre = 9. Octubre = 10. \
@@ -120,7 +120,7 @@ def ingresarFechaNacimiento():
             print("La fecha ingresada es: ",{dict_datos["dia"]},"/",\
                     {dict_datos["mes"]},"/",{dict_datos["mes"]},".")
 
-#CONVERSIONES DEL NOMBRE ==============================================================
+#CONVERSIONES DEL NOMBRE ================================================
 def reconocerLetra(letra: str):
     if letra == "A" or letra == "J" or letra == "S":
         return 1
@@ -156,7 +156,7 @@ def convertirNombreANumeros(nombre: str):
         digito = reconocerLetra(letra)
         dict_datos["lst_nombre_En_Numeros"].append(digito)
 
-#CALCULO DE DIFERENTES NUMEROS =================================================
+#CALCULO DE DIFERENTES NUMEROS ========================================
 def reducirEnDigitos(numero_ingresado: int):
     lst_numero_para_comparar = [999, 99, 9]
     lst_salida = [0]
@@ -172,7 +172,7 @@ def reducirEnDigitos(numero_ingresado: int):
             if numero_ingresado > opcion_comparacion:
                 numero_reducido = numero_ingresado // (opcion_comparacion + 1)
                 lst_numero_con_digitos.append(numero_reducido)
-                numero_ingresado -= (numero_reducido * (opcion_comparacion + 1))
+                numero_ingresado -=(numero_reducido*(opcion_comparacion + 1))
             if numero_reducido > 0 and digito_resultante == 0:
                 digito_resultante = numero_reducido
                 numero_reducido = 0
@@ -212,8 +212,8 @@ def calcularNumerosMaestros():
                     numero_acumulado += digito
         dict_datos[tipo] = reducirEnDigitos(numero_acumulado)
 def calcularNumeroDestino():
-    numero = dict_datos["dia"][0] + dict_datos["mes"][0] + dict_datos["anio"][0]
-    dict_datos["numero_Destino"] = reducirEnDigitos(numero)
+    numero = dict_datos["dia"][0]+dict_datos["mes"][0]+dict_datos["anio"][0]
+    dict_datos["destino"] = reducirEnDigitos(numero)
 def contarNumeros(nombre_en_numeros):
     for indice in nombre_en_numeros:
         for numero in lst_numeros:
@@ -226,7 +226,7 @@ def contarAusencias():
         resultado = int(numero.ausentes())
         if resultado != 0:
             lst_ausentes.append(resultado)
-    dict_datos["Ausentes"] = lst_ausentes
+    dict_datos["ausentes"] = lst_ausentes
 def contarRepeticiones(numero_mayor: int, es_primero):
     global dict_datos
     lst_mas_repetidos = []
@@ -249,6 +249,71 @@ def contarRepeticiones(numero_mayor: int, es_primero):
         return 0
     dict_datos["segundo_digito_mas_repetido"] = numero_mayor
     dict_datos["lst_segundos_mas_repetidos"] = lst_mas_repetidos
+
+#CALCULO DE DIGNIDADES===================================
+def otorgarValorADignidad(nombre_llave):
+    if nombre_llave == "caracter":
+        return 12
+    if nombre_llave == "corazon":
+        return 11
+    if nombre_llave == "social":
+        return 10
+    if nombre_llave == "destino":
+        return 12
+    if nombre_llave == "ausentes":
+        return -10
+    if nombre_llave == "lst_mas_repetidos":
+        return 7
+    if nombre_llave == "lst_segundos_mas_repetidos":
+        return 5
+    if nombre_llave == "compuesto":
+        return 4
+    if nombre_llave == "reducto":
+        return -6
+
+def calcular_dignidad():
+    global dict_datos
+    for key, value in dict_datos.items():
+        valor_dignidad = 0
+        if key == "dia" or key == "mes" or key == "anio" or \
+            key == "lst_nombre_En_Numeros" or key == "digito_mas_repetido" or \
+            key == "segundo_digito_mas_repetido":
+            continue
+        valor_dignidad = otorgarValorADignidad(key)
+        if key == "lst_mas_repetidos":
+            for digito in value[0]:
+                ubicarDigito(digito, valor_dignidad)
+            continue
+        if key == "lst_segundos_mas_repetidos":
+            for digito in value[0]:
+                ubicarDigito(digito, valor_dignidad)
+            continue
+        if type(value) == list:
+            ubicarDigito(value[0], valor_dignidad)
+            cantidad_externa = len(value)
+            listas_en_key = 1
+            while listas_en_key < cantidad_externa:
+                if value[listas_en_key][0] < 20:
+                    valor_dignidad = otorgarValorADignidad("reducto")
+                    ubicarDigito(value[listas_en_key][2], valor_dignidad)
+                    listas_en_key += 1
+                    continue
+                cantidad_interna = len(value[listas_en_key])
+                listas_internas = 1
+                valor_dignidad = otorgarValorADignidad("compuesto")
+                while listas_internas < cantidad_interna:
+                    ubicarDigito(value[listas_en_key][listas_internas], \
+                    valor_dignidad)
+                    listas_internas += 1
+                listas_en_key += 1
+            continue
+#        ubicarDigito(value[0], valor_dignidad)
+
+def ubicarDigito(number: int, dignidad: int):
+    for opcion_numero in lst_numeros:
+        if number == opcion_numero.digito:
+            opcion_numero.dignidad += dignidad
+            break
 
 #IMPRESIONES =======================================================
 def mostrarNombreEnNumeros(lista):
@@ -314,7 +379,7 @@ def mostrarRepeticiones():
             dict_datos["segundo_digito_mas_repetido"])        
     print("")
 
-#APLICACIONES GENERALES =======================================================
+#APLICACIONES GENERALES ==========================================
 def ingresarDatos():
     print("Bienvenido al programa de numerología.")
     ingresarNombre()
@@ -333,11 +398,13 @@ def mostrarDiccionario():
     print("Numero de carácter: ", dict_datos["caracter"][0])
     print("Numero de corazon: ", dict_datos["corazon"][0])
     print("Numero de lo social: ", dict_datos["social"][0])
-    print("Numero de destino: ", dict_datos["numero_Destino"][0])
+    print("Numero de destino: ", dict_datos["destino"][0])
     mostrarRepeticiones()
-
-    #for x,y in dict_datos.items():
-    #    print("{} = {}".format(x, y))
+    for x,y in dict_datos.items():
+        print("{} = {}".format(x, y))
+    calcular_dignidad()
+    for numero in lst_numeros:
+        print("Dignidad del ", numero.digito, ": ", numero.dignidad)
 
 ingresarDatos()
 calcularDatos()

@@ -16,3 +16,16 @@ C - Crear relaciones y análisis entre los datos.
     3- Aplicacion de dignidades de cada dígito.
 D - Producir texto procesado para el usuario.
     1- Marcar la interaccion de los datos según la dignidad de los numeros implicados.
+
+Sobre las dignidades:
+*Numero de caracter(Numero general).................................12 dignidades
+*Numero del corazon(Numero del pensamiento interno).................11 dignidades
+*Numero social(Numero del aspecto social)...........................10 dignidades
+*Numero del destino(Numero del deseo interno).......................12 dignidades
+-*Numeros compuestos..................................................4 dignidades
+-*1ra linea de más repeticiones(Aspectos de potencia de la destreza)..7 dignidades
+-*2da linea de más repeticiones.......................................5 dignidades
+-*Decenas de reducción(números del ego)..............................-6 dignidades
+Numeros ausentes(números karmicos).................................-10 dignidades
+-si hay mayoria de pares en los numeros primordiales.................3 dignidades
+-si hay mayoria de impares en los numeros primordiales...............3 dignidades
