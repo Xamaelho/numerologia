@@ -1,8 +1,19 @@
+from IngresarFecha import *
+
 #SOBRE LA CLASE ===================================================
 class numeros():
-    def __init__(self, digito:int, esPar, esta_presente, dignidad:int):
+    """
+    Almacena la informacion de los digitos.
+
+    Partes
+    digito -- número de type int para comparaciones con variables.
+    es_par -- característica de la instancia.
+    esta_presente -- contador de repeticiones en lst_nombre_en_numeros.
+    dignidad -- almacena los usos de cada instancia.
+    """
+    def __init__(self, digito:int, es_par, esta_presente, dignidad:int):
         self.digito = digito                
-        self.esPar = esPar                  
+        self.es_par = es_par                 
         self.esta_presente = esta_presente
         self.dignidad = dignidad
     def ausentes(self):
@@ -53,75 +64,16 @@ def ingresarNombre():
             control = False
 
 #SOBRE LA FECHA DE NACIMIENTO ============================================
-def esBisiesto(year: int):
-    return year % 4 == 0 and year % 100 != 0 or year % 400 == 0
-def ingresarDiaNacimiento():
+def implemetarFecha():
     global dict_datos
-    control = True
-    while control:
-        dia = int(input("Ingrese el día: "))
-        if dia < 1 or dia > 31 :
-            print("Se ha ingresado un número erróneo para el día")
-        else:
-            control = False
-    dict_datos["dia"] = reducirEnDigitos(dia)
-def ingresarMesNacimiento():
-    global dict_datos
-    control = True
-    while control:
-        mes = int(input("Ingrese el mes de nacimiento en números (1 a 12): "))
-        if mes < 1 or mes > 12 :
-            print("Se ha ingresado un número erróneo para el mes de \
-                nacimiento. Debe ser un número del 1 al 12")
-            print("Enero = 1. Febrero = 2. Marzo = 3. Abril = 4. Mayo = 5. \
-                Junio = 6.")
-            print("Julio = 7. Agosto = 8. Septiembre = 9. Octubre = 10. \
-                Noviembre = 11. Dicciembre = 12.")
-        else:
-            control = False
-    dict_datos["mes"] = reducirEnDigitos(mes)
-def ingresarAnioNacimiento():
-    global dict_datos
-    anio = int(input("Ingrese el año: "))
-    dict_datos["anio"] = reducirEnDigitos(anio)
-def comprobarFecha():
-    global dict_datos, control
-    if (esBisiesto(dict_datos["anio"][0]) == False and \
-            dict_datos["mes"][0] == 2 and dict_datos["dia"][0] > 28 ):
-        print("Se ha ingresado mal el día de nacimiento. \
-                Febrero en ese año tiene hasta 28 días.")
-        control = True
-        return control
-    if (esBisiesto(dict_datos["anio"][0]) == True and \
-            dict_datos["mes"][0] == 2 and dict_datos["dia"][0] > 29 ):
-        print("Se ha ingresado mal el día de nacimiento. Febrero en ese año \
-                tiene hasta 29 días.")
-        control = True
-        return control
-    if (dict_datos["mes"][0] == 4 or dict_datos["mes"][0] == 6 or \
-            dict_datos["mes"][0] == 9 or dict_datos["mes"][0] == 11 and \
-            dict_datos["dia"][0] > 30 ):
-        print("Se ha ingresado un número erróneo para el día. \
-                Ese mes tiene hasta 30 días.")
-        control = True
-        return control
-    control = False
-    return control
-def ingresarFechaNacimiento():
-    global control, dict_datos
-    control = True
-    print("Primero, ingrese su fecha de nacimiento...")
-    while control:
-        ingresarDiaNacimiento()
-        ingresarMesNacimiento()
-        ingresarAnioNacimiento()
-        comprobarFecha()
-        if control:
-            print("La fecha ingresada es: ",{dict_datos["dia"]},"/",\
-                    {dict_datos["mes"]},"/",{dict_datos["mes"]},".")
+    dict_Fecha = ingresarFechaNacimiento()
+    dict_datos["dia"] = reducirEnDigitos(dict_Fecha["dia"])
+    dict_datos["mes"] = reducirEnDigitos(dict_Fecha["mes"])
+    dict_datos["anio"] = reducirEnDigitos(dict_Fecha["año"])
 
 #CONVERSIONES DEL NOMBRE ================================================
 def reconocerLetra(letra: str):
+    """Convertir la letra ingresada en un número."""
     if letra == "A" or letra == "J" or letra == "S":
         return 1
     if letra == "B" or letra == "K" or letra == "T":
@@ -146,18 +98,23 @@ def esVocal(letra: str):
     if (letra == "A" or letra == "E" or letra == "I" or letra == "O" or \
             letra == "U"):
         return True
-    else:
-        return False
-
+    return False
 def convertirNombreANumeros(nombre: str):
+    """Convertir la cadena en una lista de números."""
     global dict_datos
-    dict_datos["lst_nombre_En_Numeros"] = []
+    dict_datos["lst_nombre_en_numeros"] = []
     for letra in nombre:
         digito = reconocerLetra(letra)
-        dict_datos["lst_nombre_En_Numeros"].append(digito)
+        dict_datos["lst_nombre_en_numeros"].append(digito)
 
 #CALCULO DE DIFERENTES NUMEROS ========================================
 def reducirEnDigitos(numero_ingresado: int):
+    """Reducir el argumento hasta obtener un número de un solo dígito.
+    
+    Argumentos:
+    numero_ingresado -- numero menor a 10.000 (funcion creada para usar solo
+        con este tipo de análisis)
+    """
     lst_numero_para_comparar = [999, 99, 9]
     lst_salida = [0]
     lst_numero_con_digitos = list()
@@ -190,11 +147,12 @@ def reducirEnDigitos(numero_ingresado: int):
                     lst_salida[0] = numero_ingresado
     return lst_salida    
 def calcularNumerosMaestros():
+    """Calcular numeros importantes segun la lista lst_nombre_en_numeros."""
     global dict_datos, nombre_en_letras, tlp_numeros_maestros
     for tipo in tlp_numeros_maestros:
         numero_acumulado = 0
         if tipo == "caracter":
-            for numero in dict_datos["lst_nombre_En_Numeros"]:
+            for numero in dict_datos["lst_nombre_en_numeros"]:
                 if numero == " ":
                     continue
                 numero_acumulado += numero
@@ -215,6 +173,7 @@ def calcularNumeroDestino():
     numero = dict_datos["dia"][0]+dict_datos["mes"][0]+dict_datos["anio"][0]
     dict_datos["destino"] = reducirEnDigitos(numero)
 def contarNumeros(nombre_en_numeros):
+    """Cargar las ocurrencias de cada numero en la clase <<numeros>>."""
     for indice in nombre_en_numeros:
         for numero in lst_numeros:
             if indice == numero.digito:
@@ -276,7 +235,7 @@ def calcular_dignidad():
     for key, value in dict_datos.items():
         valor_dignidad = 0
         if key == "dia" or key == "mes" or key == "anio" or \
-            key == "lst_nombre_En_Numeros" or key == "digito_mas_repetido" or \
+            key == "lst_nombre_en_numeros" or key == "digito_mas_repetido" or \
             key == "segundo_digito_mas_repetido":
             continue
         valor_dignidad = otorgarValorADignidad(key)
@@ -288,27 +247,23 @@ def calcular_dignidad():
             for digito in value[0]:
                 ubicarDigito(digito, valor_dignidad)
             continue
-        if type(value) == list:
-            ubicarDigito(value[0], valor_dignidad)
-            cantidad_externa = len(value)
-            listas_en_key = 1
-            while listas_en_key < cantidad_externa:
-                if value[listas_en_key][0] < 20:
-                    valor_dignidad = otorgarValorADignidad("reducto")
-                    ubicarDigito(value[listas_en_key][2], valor_dignidad)
-                    listas_en_key += 1
-                    continue
-                cantidad_interna = len(value[listas_en_key])
-                listas_internas = 1
-                valor_dignidad = otorgarValorADignidad("compuesto")
-                while listas_internas < cantidad_interna:
-                    ubicarDigito(value[listas_en_key][listas_internas], \
-                    valor_dignidad)
-                    listas_internas += 1
+        ubicarDigito(value[0], valor_dignidad)
+        cantidad_externa = len(value)
+        listas_en_key = 1
+        while listas_en_key < cantidad_externa:
+            if value[listas_en_key][0] < 20:
+                valor_dignidad = otorgarValorADignidad("reducto")
+                ubicarDigito(value[listas_en_key][2], valor_dignidad)
                 listas_en_key += 1
-            continue
-#        ubicarDigito(value[0], valor_dignidad)
-
+                continue
+            cantidad_interna = len(value[listas_en_key])
+            listas_internas = 1
+            valor_dignidad = otorgarValorADignidad("compuesto")
+            while listas_internas < cantidad_interna:
+                ubicarDigito(value[listas_en_key][listas_internas], \
+                valor_dignidad)
+                listas_internas += 1
+            listas_en_key += 1
 def ubicarDigito(number: int, dignidad: int):
     for opcion_numero in lst_numeros:
         if number == opcion_numero.digito:
@@ -323,7 +278,7 @@ def mostrarNumerosMaestros():
     global dict_datos, nombre_en_letras, tlp_numeros_maestros
     for tipo in tlp_numeros_maestros:
         if tipo == "caracter":
-            for numero in dict_datos["lst_nombre_En_Numeros"]:
+            for numero in dict_datos["lst_nombre_en_numeros"]:
                 print(numero,end="")
         if tipo == "corazon":
             for letra in nombre_en_letras:
@@ -349,7 +304,7 @@ def mostrarNumerosMaestros():
             if contador != 0:
                 print(" -> ",dict_datos[tipo][contador][0] ,end="")
                 contador += 1
-        print(" -> ",digito_maestro,"    Numero de ", tipo, "    ")
+        print(" -> ",digito_maestro)
     print("")
 def impresionRepeticiones(lista, digito):
     lenLista = len(lista)
@@ -383,12 +338,12 @@ def mostrarRepeticiones():
 def ingresarDatos():
     print("Bienvenido al programa de numerología.")
     ingresarNombre()
-    ingresarFechaNacimiento()
+    implemetarFecha()
 def calcularDatos():
     global nombre_en_letras
     convertirNombreANumeros(nombre_en_letras)
     calcularNumerosMaestros()
-    contarNumeros(dict_datos['lst_nombre_En_Numeros'])
+    contarNumeros(dict_datos['lst_nombre_en_numeros'])
     calcularNumeroDestino()
 def mostrarTramaDelNombre():
     print(nombre_en_letras)
