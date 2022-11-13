@@ -34,9 +34,20 @@ seis6 = numeros(6, True, 0, 0)
 siete7 = numeros(7, False, 0, 0)
 ocho8 = numeros(8, True, 0, 0)
 nueve9 = numeros(9, False, 0, 0)
-lst_numeros = [uno1, dos2, tres3, cuatro4, cinco5, seis6, siete7, ocho8, nueve9]
+lst_numeros = [uno1,dos2,tres3,cuatro4,cinco5,seis6,siete7,ocho8,nueve9]
 dict_datos = dict()
 tlp_numeros_maestros = ("caracter", "corazon", "social")
+translated_digits = {1:("J","A","S"),2:("B","K","T"),3:("C","L","U"),
+              4:("D","M","V"),5:("E","N","Ñ","W"),6:("F","O","X"),
+              7:("G","P","Y"),8:("H","Q","Z"),9:("I","R")," ":" "}
+dignity_dict = {12:("caracter","destino"),11:"corazon",10:"social",
+                -10:"ausentes",7:"lst_mas_repetidos",4:"compuesto",
+                5:"lst_segundos_mas_repetidos",-6:"reducto"}
+
+def analize_dict(dict_arg:dict,var_arg):
+    for key,value in dict_arg.items():
+        if var_arg in value:
+            return key
 #INGRESOS ========================================================
 def ingresarNombre():
     global nombre_en_letras
@@ -44,17 +55,10 @@ def ingresarNombre():
     while control:
         nombre_en_letras = input("Ingrese su nombre completo: ")
         nombre_en_letras = nombre_en_letras.upper()
+        options = (" ","A","B","C","D","E","F","G","H","I","J","K","L","M","N",
+                    "Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z")
         for letra in nombre_en_letras:
-            if (letra == " " or letra == "A" or letra == "B" or \
-                    letra == "C" or letra == "D" or letra == "E" or \
-                    letra == "F" or letra == "G" or letra == "H" or \
-                    letra == "I" or letra == "J" or letra == "K" or \
-                    letra == "L" or letra == "M" or letra == "N" or \
-                    letra == "Ñ" or letra == "O" or letra == "P" or \
-                    letra == "Q" or letra == "R" or letra == "S" or \
-                    letra == "T" or letra == "U" or letra == "V" or \
-                    letra == "W" or letra == "X" or letra == "Y" or \
-                    letra == "Z" ):
+            if letra in options:
                 continue
             else :
                 print("Se ha ingresado un caracter especial por error.")
@@ -72,80 +76,79 @@ def implemetarFecha():
     dict_datos["anio"] = reducirEnDigitos(dict_Fecha["año"])
 
 #CONVERSIONES DEL NOMBRE ================================================
-def reconocerLetra(letra: str):
-    """Convertir la letra ingresada en un número."""
-    if letra == "A" or letra == "J" or letra == "S":
-        return 1
-    if letra == "B" or letra == "K" or letra == "T":
-        return 2
-    if letra == "C" or letra == "L" or letra == "U":
-        return 3
-    if letra == "D" or letra == "M" or letra == "V":
-        return 4
-    if letra == "E" or letra == "N" or letra == "Ñ" or letra == "W":
-        return 5
-    if letra == "F" or letra == "O" or letra == "X":
-        return 6
-    if letra == "G" or letra == "P" or letra == "Y":
-        return 7
-    if letra == "H" or letra == "Q" or letra == "Z":
-        return 8
-    if letra == "I" or letra == "R":
-        return 9
-    if letra == " ":
-        return " "
 def esVocal(letra: str):
-    if (letra == "A" or letra == "E" or letra == "I" or letra == "O" or \
-            letra == "U"):
-        return True
-    return False
+    return letra in ("A","E","I","O","U")
 def convertirNombreANumeros(nombre: str):
     """Convertir la cadena en una lista de números."""
     global dict_datos
     dict_datos["lst_nombre_en_numeros"] = []
     for letra in nombre:
-        digito = reconocerLetra(letra)
+        digito = analize_dict(translated_digits,letra)
         dict_datos["lst_nombre_en_numeros"].append(digito)
 
 #CALCULO DE DIFERENTES NUMEROS ========================================
-def reducirEnDigitos(numero_ingresado: int):
-    """Reducir el argumento hasta obtener un número de un solo dígito.
+def reducirEnDigitos(entered_number: int):
+    """Reduce a number by adding its digits until it has a single digit.
     
-    Argumentos:
-    numero_ingresado -- numero menor a 10.000 (funcion creada para usar solo
-        con este tipo de análisis)
+    Args:
+        entered_number:Int -> un número positivo
+
+    Variables:
+        lst_number_to_compare:List -> contains comparison units with the arg.
+        comparator:Int -> a number that increases if its digits are not 
+                greater than entered_number variable.
+        lst_output:List -> Contains all the data extracted from each loop. 
+                The index 0 will always contain the final digit and the 
+                following lists of numbers resulting from its reduction and 
+                the digits that compose it. The final format will be:
+                [reduced_digit,[first_reduced_number,her_digits][second...]]
+        lst_results_with_digits:List -> contains during one round of the loop,
+                the resulting number with its digits.
+                
+    Algorithm:
+        1- Calculate how many digits the entered number has. It is compared 
+                to 10, 100, 1000, etc.
+        2- Reduce the entered number by adding its digits and saving both the
+                result and its digits in a list.
+        3- Check if the number is greater than 9 (when it can no longer be 
+                reduced), otherwise continue reducing.
     """
-    lst_numero_para_comparar = [999, 99, 9]
-    lst_salida = [0]
-    lst_numero_con_digitos = list()
-    numero_reducido = 0
-    digito_resultante = 0
-    if numero_ingresado < 10:
-        lst_salida[0] = numero_ingresado
-        return lst_salida
-    while numero_ingresado > 9:
-        lst_numero_con_digitos.append(numero_ingresado)
-        for opcion_comparacion in lst_numero_para_comparar:
-            if numero_ingresado > opcion_comparacion:
-                numero_reducido = numero_ingresado // (opcion_comparacion + 1)
-                lst_numero_con_digitos.append(numero_reducido)
-                numero_ingresado -=(numero_reducido*(opcion_comparacion + 1))
-            if numero_reducido > 0 and digito_resultante == 0:
-                digito_resultante = numero_reducido
-                numero_reducido = 0
-            if numero_reducido > 0 and digito_resultante > 0:
-                digito_resultante += numero_reducido
-                numero_reducido = 0
-            if numero_ingresado < 10 and digito_resultante > 0:
-                lst_numero_con_digitos.append(numero_ingresado)
-                lst_salida.append(lst_numero_con_digitos)
-                numero_ingresado += digito_resultante
-                digito_resultante = 0
-                if numero_ingresado > 9:
-                    lst_numero_con_digitos = []
+    comparator = 10
+    lst_number_to_compare = [9]
+    while entered_number > comparator:
+        comparator = comparator * 10
+        lst_number_to_compare.append(comparator-1)
+    lst_output = [0]
+    lst_results_with_digits = list()
+    reduced_number = 0
+    resulting_number = 0
+    if entered_number < 10:
+        lst_output[0] = entered_number
+        return lst_output
+    lst_number_to_compare.reverse()
+    while entered_number > 9:
+        lst_results_with_digits.append(entered_number)
+        for option_number in lst_number_to_compare:
+            if entered_number > option_number:
+                reduced_number = entered_number // (option_number + 1)
+                lst_results_with_digits.append(reduced_number)
+                entered_number -=(reduced_number*(option_number + 1))
+            if reduced_number > 0 and resulting_number == 0:
+                resulting_number = reduced_number
+                reduced_number = 0
+            if reduced_number > 0 and resulting_number > 0:
+                resulting_number += reduced_number
+                reduced_number = 0
+            if entered_number < 10 and resulting_number > 0:
+                lst_results_with_digits.append(entered_number)
+                lst_output.append(lst_results_with_digits)
+                entered_number += resulting_number
+                resulting_number = 0
+                if entered_number > 9:
+                    lst_results_with_digits = []
                 else:
-                    lst_salida[0] = numero_ingresado
-    return lst_salida    
+                    lst_output[0] = entered_number
+    return lst_output
 def calcularNumerosMaestros():
     """Calcular numeros importantes segun la lista lst_nombre_en_numeros."""
     global dict_datos, nombre_en_letras, tlp_numeros_maestros
@@ -159,14 +162,14 @@ def calcularNumerosMaestros():
         if tipo == "corazon":
             for letra in nombre_en_letras:
                 if esVocal(letra):
-                    digito = reconocerLetra(letra)
+                    digito = analize_dict(translated_digits,letra)
                     numero_acumulado += digito
         if tipo == "social":
             for letra in nombre_en_letras:
                 if esVocal(letra) or letra == " ":
                     continue
                 else:
-                    digito = reconocerLetra(letra)
+                    digito = analize_dict(translated_digits,letra)
                     numero_acumulado += digito
         dict_datos[tipo] = reducirEnDigitos(numero_acumulado)
 def calcularNumeroDestino():
@@ -210,26 +213,6 @@ def contarRepeticiones(numero_mayor: int, es_primero):
     dict_datos["lst_segundos_mas_repetidos"] = lst_mas_repetidos
 
 #CALCULO DE DIGNIDADES===================================
-def otorgarValorADignidad(nombre_llave):
-    if nombre_llave == "caracter":
-        return 12
-    if nombre_llave == "corazon":
-        return 11
-    if nombre_llave == "social":
-        return 10
-    if nombre_llave == "destino":
-        return 12
-    if nombre_llave == "ausentes":
-        return -10
-    if nombre_llave == "lst_mas_repetidos":
-        return 7
-    if nombre_llave == "lst_segundos_mas_repetidos":
-        return 5
-    if nombre_llave == "compuesto":
-        return 4
-    if nombre_llave == "reducto":
-        return -6
-
 def calcular_dignidad():
     global dict_datos
     for key, value in dict_datos.items():
@@ -238,7 +221,7 @@ def calcular_dignidad():
             key == "lst_nombre_en_numeros" or key == "digito_mas_repetido" or \
             key == "segundo_digito_mas_repetido":
             continue
-        valor_dignidad = otorgarValorADignidad(key)
+        valor_dignidad = analize_dict(dignity_dict,key)
         if key == "lst_mas_repetidos":
             for digito in value[0]:
                 ubicarDigito(digito, valor_dignidad)
@@ -252,13 +235,13 @@ def calcular_dignidad():
         listas_en_key = 1
         while listas_en_key < cantidad_externa:
             if value[listas_en_key][0] < 20:
-                valor_dignidad = otorgarValorADignidad("reducto")
+                valor_dignidad = analize_dict(dignity_dict,"reducto")
                 ubicarDigito(value[listas_en_key][2], valor_dignidad)
                 listas_en_key += 1
                 continue
             cantidad_interna = len(value[listas_en_key])
             listas_internas = 1
-            valor_dignidad = otorgarValorADignidad("compuesto")
+            valor_dignidad = analize_dict(dignity_dict,"compuesto")
             while listas_internas < cantidad_interna:
                 ubicarDigito(value[listas_en_key][listas_internas], \
                 valor_dignidad)
@@ -283,7 +266,7 @@ def mostrarNumerosMaestros():
         if tipo == "corazon":
             for letra in nombre_en_letras:
                 if esVocal(letra):
-                    digito = reconocerLetra(letra)
+                    digito = analize_dict(translated_digits,letra)
                     print(digito,end="")
                 else:
                     print(" ",end="")
@@ -292,7 +275,7 @@ def mostrarNumerosMaestros():
                 if esVocal(letra) or letra == " ":
                     print(" ",end="")
                 else:
-                    digito = reconocerLetra(letra)
+                    digito = analize_dict(translated_digits,letra)
                     print(digito,end="")
         contador = 0
         for reduccion in dict_datos[tipo]:
